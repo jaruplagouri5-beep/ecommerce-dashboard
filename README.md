@@ -103,3 +103,33 @@ Use the following credentials to log in as **ADMIN**:
 
 This project demonstrates a **real-world role-based e-commerce admin dashboard** using Next.js with proper authentication, authorization, and clean UI architecture.  
 It is suitable for **academic submission, portfolio projects, and real-world learning**.
+
+## 🚀 Deployment
+
+This project is successfully deployed using **Vercel**, which provides seamless hosting and serverless support for Next.js applications.
+
+### 🔗 Live URL
+👉 https://ecommerce-dashboard-w1ap.vercel.app
+
+### 🛠 Deployment Platform
+- **Vercel**
+- GitHub-integrated CI/CD
+- Automatic builds on every push to `main` branch
+
+### ⚙️ Environment Configuration
+The following environment variables are securely configured in Vercel:
+
+- `MONGODB_URI` – MongoDB Atlas connection string  
+- `CLOUDINARY_CLOUD_NAME` – Cloudinary cloud name  
+- `CLOUDINARY_API_KEY` – Cloudinary API key  
+- `CLOUDINARY_API_SECRET` – Cloudinary API secret  
+
+> Environment variables are managed securely via the Vercel dashboard and are not exposed in the client.
+
+### ✅ Deployment Status
+- Production build: **Successful**
+- Backend APIs: **Serverless (Next.js App Router)**
+- Authentication & Database: **Fully functional in production**
+
+---
+
