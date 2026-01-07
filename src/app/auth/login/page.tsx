@@ -29,6 +29,8 @@ export default function LoginPage() {
       if (!res.ok) throw new Error()
 
       toast.success('Login successful')
+
+      // 🔁 IMPORTANT REDIRECT
       router.replace('/')
     } catch {
       toast.error('Invalid credentials')
@@ -70,7 +72,6 @@ export default function LoginPage() {
           </button>
         </div>
 
-        {/* 🔁 SWITCH TO REGISTER */}
         <p className="mt-5 text-center text-sm text-slate-400">
           Don’t have an account?{' '}
           <button

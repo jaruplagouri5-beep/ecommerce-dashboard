@@ -16,10 +16,10 @@ export async function POST(req: Request) {
     )
   }
 
-  // ✅ SUCCESS
+  // ✅ SUCCESS RESPONSE
   const response = NextResponse.json({ success: true })
 
-  // 🔐 AUTH TOKEN
+  // 🔐 AUTH TOKEN (server-only)
   response.cookies.set({
     name: 'token',
     value: user._id.toString(),
@@ -27,11 +27,11 @@ export async function POST(req: Request) {
     path: '/',
   })
 
-  // 🔐 ROLE COOKIE (VERY IMPORTANT)
+  // 🔐 ROLE COOKIE (client readable)
   response.cookies.set({
     name: 'role',
     value: user.role.toUpperCase(), // ADMIN | USER
-    httpOnly: false, // client can read
+    httpOnly: false,
     path: '/',
   })
 

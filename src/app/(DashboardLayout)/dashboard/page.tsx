@@ -1,151 +1,105 @@
-// 'use client'
+'use client'
 
-// import { motion } from 'framer-motion'
-// import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
-// import { useCurrentUser } from '@/lib/useCurrentUser'
+import AnimatedCounter from '@/components/dashboard/AnimatedCounter'
+import RevenueChart from '@/components/dashboard/RevenueChart'
+import CategoryPieChart from '@/components/dashboard/CategoryPieChart'
+import OrdersTrendChart from '@/components/dashboard/OrdersTrendChart'
+import StockTrendChart from '@/components/dashboard/StockTrendChart'
 
-// import AnimatedCounter from '@/components/dashboard/AnimatedCounter'
-// import RevenueChart from '@/components/dashboard/RevenueChart'
-// import CategoryPieChart from '@/components/dashboard/CategoryPieChart'
-// import OrdersTrendChart from '@/components/dashboard/OrdersTrendChart'
-// import StockTrendChart from '@/components/dashboard/StockTrendChart'
+type Role = 'ADMIN' | 'USER'
 
-// export default function DashboardPage() {
-//   const user = useCurrentUser()
-//   const isAdmin = user?.role === 'admin'
+export default function DashboardPage() {
+  const router = useRouter()
+  const [role, setRole] = useState<Role | null>(null)
 
-//   return (
-//     <div className="space-y-8 min-h-screen pb-10">
+  // 🔐 Read role from cookie
+  useEffect(() => {
+    const roleCookie = document.cookie
+      .split('; ')
+      .find(c => c.startsWith('role='))
+      ?.split('=')[1] as Role | undefined
 
-//       {/* ================= WELCOME BAR (ADMIN ONLY) ================= */}
-//       {isAdmin && (
-//         <motion.div
-//           initial={{ opacity: 0, y: -20 }}
-//           animate={{ opacity: 1, y: 0 }}
-//           transition={{ duration: 0.4 }}
-//           className="flex items-center gap-4 bg-slate-800 border border-slate-700 rounded-2xl p-6"
-//         >
-//           <Image
-//             src="/images/profile/user-9.jpg"
-//             alt="Admin"
-//             width={56}
-//             height={56}
-//             className="rounded-full"
-//           />
+    if (!roleCookie) {
+      router.replace('/auth/login')
+      return
+    }
 
-//           <div>
-//             <h2 className="text-xl font-semibold">
-//               Welcome back,{' '}
-//               <span className="text-blue-400">
-//                 {user?.name ?? 'Admin'}
-//               </span>{' '}
-//               👋
-//             </h2>
-//             <p className="text-slate-400 text-sm">
-//               Here’s what’s happening with your store today
-//             </p>
-//           </div>
-//         </motion.div>
-//       )}
+    setRole(roleCookie)
+  }, [router])
 
-//       {/* ================= STAT CARDS ================= */}
-//       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-//         <StatCard title="Revenue" prefix="₹" value={96000} />
-//         <StatCard title="Products" value={248} />
-//         <StatCard title="Orders" value={1280} />
-//         <StatCard title="Out of Stock" value={12} />
-//       </div>
+  if (!role) {
+    return (
+      <div className="flex min-h-screen items-center justify-center text-slate-400">
+        Loading dashboard...
+      </div>
+    )
+  }
 
-//       {/* ================= REVENUE + CATEGORY ================= */}
-//       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  const isAdmin = role === 'ADMIN'
 
-//         {/* Revenue Chart */}
-//         <motion.div
-//           initial={{ opacity: 0, x: -30 }}
-//           animate={{ opacity: 1, x: 0 }}
-//           transition={{ duration: 0.4 }}
-//           className="lg:col-span-2 bg-slate-800 border border-slate-700 rounded-xl p-6"
-//         >
-//           <h3 className="font-semibold mb-4">Revenue Overview</h3>
+  return (
+    <div className="space-y-8 min-h-screen p-6 bg-slate-900 text-white">
 
-//           {/* 🔑 HEIGHT REQUIRED */}
-//           <div className="h-[360px]">
-//             <RevenueChart />
-//           </div>
-//         </motion.div>
+      {/* 👋 ADMIN WELCOME */}
+      {isAdmin && (
+        <h1 className="text-2xl font-bold text-blue-400">
+          Welcome Admin 👋
+        </h1>
+      )}
 
-//         {/* Products by Category */}
-//         <motion.div
-//           initial={{ opacity: 0, x: 30 }}
-//           animate={{ opacity: 1, x: 0 }}
-//           transition={{ duration: 0.4 }}
-//           className="bg-slate-800 border border-slate-700 rounded-xl p-6"
-//         >
-//           <CategoryPieChart onSelect={() => {}} />
-//         </motion.div>
-//       </div>
+      {/* ===== STATS ===== */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard title="Revenue" prefix="₹" value={96000} />
+        <StatCard title="Products" value={248} />
+        <StatCard title="Orders" value={1280} />
+        <StatCard title="Out of Stock" value={12} />
+      </div>
 
-//       {/* ================= ORDERS + STOCK ================= */}
-//       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* ===== REVENUE + CATEGORY ===== */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 h-[360px] rounded-xl bg-slate-800 p-4">
+          <RevenueChart />
+        </div>
 
-//         {/* Orders Trend */}
-//         <motion.div
-//           initial={{ opacity: 0, y: 20 }}
-//           animate={{ opacity: 1, y: 0 }}
-//           transition={{ duration: 0.4 }}
-//           className="bg-slate-800 border border-slate-700 rounded-xl p-6"
-//         >
-//           <h3 className="font-semibold mb-2">Orders Trend</h3>
+        <div className="h-[360px] rounded-xl bg-slate-800 p-4">
+          <CategoryPieChart onSelect={() => {}} />
+        </div>
+      </div>
 
-//           {/* 🔑 HEIGHT REQUIRED */}
-//           <div className="h-[320px]">
-//             <OrdersTrendChart />
-//           </div>
-//         </motion.div>
+      {/* ===== ORDERS + STOCK (IMPORTANT FIX) ===== */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="h-[320px] rounded-xl bg-slate-800 p-4">
+          <OrdersTrendChart />
+        </div>
 
-//         {/* Stock Trend */}
-//         <motion.div
-//           initial={{ opacity: 0, y: 20 }}
-//           animate={{ opacity: 1, y: 0 }}
-//           transition={{ duration: 0.4 }}
-//           className="bg-slate-800 border border-slate-700 rounded-xl p-6"
-//         >
-//           <h3 className="font-semibold mb-2">Stock Trend</h3>
+        <div className="h-[320px] rounded-xl bg-slate-800 p-4">
+          <StockTrendChart />
+        </div>
+      </div>
+    </div>
+  )
+}
 
-//           {/* 🔑 HEIGHT REQUIRED */}
-//           <div className="h-[320px]">
-//             <StockTrendChart />
-//           </div>
-//         </motion.div>
-
-//       </div>
-//     </div>
-//   )
-// }
-
-// /* ================= STAT CARD ================= */
-// function StatCard({
-//   title,
-//   value,
-//   prefix = '',
-// }: {
-//   title: string
-//   value: number
-//   prefix?: string
-// }) {
-//   return (
-//     <motion.div
-//       initial={{ opacity: 0, scale: 0.95 }}
-//       animate={{ opacity: 1, scale: 1 }}
-//       transition={{ duration: 0.25 }}
-//       className="bg-slate-800 border border-slate-700 rounded-xl p-5"
-//     >
-//       <p className="text-slate-400 text-sm">{title}</p>
-//       <h3 className="text-2xl font-bold mt-2">
-//         {prefix}
-//         <AnimatedCounter value={value} />
-//       </h3>
-//     </motion.div>
-//   )
-// }
+/* ===== STAT CARD ===== */
+function StatCard({
+  title,
+  value,
+  prefix = '',
+}: {
+  title: string
+  value: number
+  prefix?: string
+}) {
+  return (
+    <div className="rounded-xl bg-slate-800 p-5">
+      <p className="text-slate-400">{title}</p>
+      <h3 className="text-2xl font-bold">
+        {prefix}
+        <AnimatedCounter value={value} />
+      </h3>
+    </div>
+  )
+}

@@ -2,17 +2,12 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(req: NextRequest) {
+  const token = req.cookies.get('token')?.value
   const { pathname } = req.nextUrl
 
-  // allow auth pages
-  if (
-    pathname.startsWith('/auth/login') ||
-    pathname.startsWith('/auth/register')
-  ) {
+  if (pathname.startsWith('/auth')) {
     return NextResponse.next()
   }
-
-  const token = req.cookies.get('token')?.value
 
   if (!token) {
     return NextResponse.redirect(new URL('/auth/login', req.url))
@@ -22,9 +17,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/',                 // ✅ DASHBOARD HOME
-    '/products/:path*',
-    '/upload/:path*',
-  ],
+  matcher: ['/', '/dashboard/:path*', '/products/:path*'],
 }

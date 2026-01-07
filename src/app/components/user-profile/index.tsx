@@ -3,7 +3,6 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
-import CardBox from '../shared/CardBox'
 import {
   Dialog,
   DialogContent,
@@ -24,7 +23,7 @@ const UserProfile = () => {
     email: 'igl.kumari@gmail.com',
     phone: '9123333222',
     position: 'Team Leader',
-    location: 'india',
+    location: 'India',
   })
 
   const [tempPersonal, setTempPersonal] = useState(personal)
@@ -41,21 +40,21 @@ const UserProfile = () => {
   }
 
   return (
-    <>
+    <div className="space-y-6">
+
       {/* ================= PROFILE HEADER ================= */}
-      <CardBox className="p-6">
+      <div className="rounded-xl border border-slate-700 bg-slate-800 p-6">
         <div className="flex items-center gap-6">
-          {/* USER IMAGE */}
           <Image
             src="/images/profile/user-1.jpg"
             alt="user"
             width={80}
             height={80}
-            className="rounded-full border"
+            className="rounded-full border border-slate-600"
           />
 
           <div className="flex-1">
-            <h2 className="text-xl font-semibold">
+            <h2 className="text-xl font-semibold text-white">
               {personal.firstName} {personal.lastName}
             </h2>
             <p className="text-slate-400 text-sm">
@@ -65,15 +64,18 @@ const UserProfile = () => {
 
           <Button onClick={() => setOpenModal(true)}>Edit</Button>
         </div>
-      </CardBox>
+      </div>
 
       {/* ================= INFO SECTIONS ================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-        {/* PERSONAL INFO */}
-        <CardBox className="p-6">
-          <h3 className="font-semibold mb-4">Personal Information</h3>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-          <div className="space-y-3 text-sm">
+        {/* PERSONAL INFO */}
+        <div className="rounded-xl border border-slate-700 bg-slate-800 p-6">
+          <h3 className="font-semibold text-white mb-4">
+            Personal Information
+          </h3>
+
+          <div className="space-y-3 text-sm text-slate-300">
             <p>
               <span className="text-slate-400">First Name:</span>{' '}
               {personal.firstName}
@@ -83,19 +85,23 @@ const UserProfile = () => {
               {personal.lastName}
             </p>
             <p>
-              <span className="text-slate-400">Email:</span> {personal.email}
+              <span className="text-slate-400">Email:</span>{' '}
+              {personal.email}
             </p>
             <p>
-              <span className="text-slate-400">Phone:</span> {personal.phone}
+              <span className="text-slate-400">Phone:</span>{' '}
+              {personal.phone}
             </p>
           </div>
-        </CardBox>
+        </div>
 
         {/* ADDRESS INFO */}
-        <CardBox className="p-6">
-          <h3 className="font-semibold mb-4">Address Details</h3>
+        <div className="rounded-xl border border-slate-700 bg-slate-800 p-6">
+          <h3 className="font-semibold text-white mb-4">
+            Address Details
+          </h3>
 
-          <div className="space-y-3 text-sm">
+          <div className="space-y-3 text-sm text-slate-300">
             <p>
               <span className="text-slate-400">Location:</span>{' '}
               {personal.location}
@@ -105,7 +111,7 @@ const UserProfile = () => {
               {personal.position}
             </p>
           </div>
-        </CardBox>
+        </div>
       </div>
 
       {/* ================= EDIT MODAL ================= */}
@@ -171,13 +177,16 @@ const UserProfile = () => {
 
           <DialogFooter className="mt-4">
             <Button onClick={handleSave}>Save Changes</Button>
-            <Button variant="outline" onClick={() => setOpenModal(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setOpenModal(false)}
+            >
               Cancel
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   )
 }
 
